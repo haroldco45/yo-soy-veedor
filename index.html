@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<script id="vibras-datos-github">/* Los datos del robot se leen directo de GitHub para no gastar créditos de Netlify */
+(function(){var R='yo-soy-veedor',B='https://raw.githubusercontent.com/haroldco45/'+R+'/main/',f=window.fetch.bind(window);
+window.fetch=function(i,o){try{var u=new URL(typeof i==='string'?i:(i&&i.url)||String(i),location.href),m=(o&&o.method)||(i&&i.method)||'GET';
+if(u.origin===location.origin&&m.toUpperCase()==='GET'&&/\/data\/[^/]+\.json$/i.test(u.pathname)){
+var p=u.pathname.replace(/^\/+/,'');if(/github\.io$/.test(location.hostname))p=p.replace(new RegExp('^'+R+'/'),'');
+return f(B+p+u.search,{cache:'no-store',signal:o&&o.signal}).then(function(r){if(!r.ok)throw 0;return r}).catch(function(){return f(i,o)})}}catch(e){}return f(i,o)}})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yo Soy Veedor · Tus impuestos tienen dueño: tú</title>
+<meta name="description" content="Aprende a ser veedor ciudadano: regístrate en el SECOP II, sigue los contratos de tu municipio con datos en vivo, adopta un contrato y exige respuestas con un derecho de petición.">
+<meta name="theme-color" content="#06231c">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Vibras Positivas HM">
+<meta property="og:title" content="Yo Soy Veedor · Tus impuestos tienen dueño: tú">
+<meta property="og:description" content="Mira en vivo los contratos de tu municipio, regístrate como veedor en el SECOP II y exige cuentas. Todo en una sola app.">
+<meta property="og:url" content="https://yo-soy-veedor.netlify.app/">
+<meta property="og:image" content="https://commons.wikimedia.org/wiki/Special:FilePath/Iglesia_de_la_Sagrada_Familia-Caucasia.jpg?width=1200">
+<meta property="og:image:alt" content="Caucasia, Antioquia">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Yo Soy Veedor · Tus impuestos tienen dueño: tú">
+<meta name="twitter:description" content="Sigue en vivo los contratos de tu municipio y exige cuentas.">
+<meta name="twitter:image" content="https://commons.wikimedia.org/wiki/Special:FilePath/Iglesia_de_la_Sagrada_Familia-Caucasia.jpg?width=1200">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="img/icon-192.png">
+<link rel="apple-touch-icon" href="img/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-slides">
+    <div class="slide on" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Iglesia_de_la_Sagrada_Familia-Caucasia.jpg?width=1600')"></div>
+    <div class="slide" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/El_r%C3%ADo_Cauca.jpg?width=1600')"></div>
+  </div>
+  <div class="hero-shade"></div>
+  <nav class="topbar">
+    <div class="brand">Vibras Positivas HM <span>·</span> <b data-i18n="veeduria">Veeduría ciudadana</b></div>
+    <button id="btnLang" class="pill" aria-label="Cambiar idioma">EN</button>
+  </nav>
+  <div class="hero-body">
+    <p class="kicker" data-i18n="kicker">Colombia · SECOP II en vivo</p>
+    <h1>Yo Soy<br><em>Veedor</em></h1>
+    <p class="lead" data-i18n="lead">Tus impuestos tienen dueño: tú. Mira en vivo los contratos de tu municipio, adopta uno, regístrate como veedor en el SECOP II y exige cuentas cuando algo no cuadre.</p>
+    <div class="hero-actions">
+      <button id="btnRefresh" class="btn primary"><span class="spin"></span><span data-i18n="refresh">Actualizar ahora</span></button>
+      <a href="#municipio" class="btn ghost" data-i18n="irMunicipio">Contratos de mi municipio</a>
+      <a href="#registro" class="btn ghost" data-i18n="irRegistro">Cómo registrarme</a>
+    </div>
+    <p id="status" class="status" aria-live="polite"></p>
+  </div>
+  <div class="ticker" aria-hidden="true"><div id="ticker" class="ticker-track"></div></div>
+</header>
+
+<section class="hoy" id="hoy">
+  <div class="sec-head">
+    <h2 data-i18n="hoy">Hoy</h2>
+    <span id="hoyFecha" class="date"></span>
+  </div>
+  <div id="hoyGrid" class="hoy-grid"></div>
+  <div class="sec-sub">
+    <h3 data-i18n="grandes">Los contratos más grandes firmados en Colombia en los últimos días</h3>
+    <span class="hint" data-i18n="desliza">Desliza</span>
+  </div>
+  <div id="grandes" class="rail"></div>
+</section>
+
+<section class="pasos-rapidos">
+  <a href="#municipio" class="paso"><b>1</b><span data-i18n="p1">Mira</span><small data-i18n="p1s">Busca los contratos de tu municipio. No necesitas registrarte.</small></a>
+  <a href="#adoptados" class="paso"><b>2</b><span data-i18n="p2">Adopta</span><small data-i18n="p2s">Escoge una obra de tu barrio y síguela de cerca.</small></a>
+  <a href="#registro" class="paso"><b>3</b><span data-i18n="p3">Regístrate</span><small data-i18n="p3s">Crea tu cuenta de veedor en el SECOP II y opina en los procesos.</small></a>
+  <a href="#exigir" class="paso"><b>4</b><span data-i18n="p4">Exige</span><small data-i18n="p4s">Si algo no cuadra, manda el derecho de petición a todos los entes de una vez.</small></a>
+</section>
+
+<section class="lista" id="municipio">
+  <div class="sec-head">
+    <h2 data-i18n="tuMunicipio">Los contratos de tu municipio</h2>
+  </div>
+  <div class="tools">
+    <div class="row">
+      <select id="fDepto" aria-label="Departamento"></select>
+      <select id="fMuni" aria-label="Municipio"></select>
+    </div>
+    <input id="q" type="search" autocomplete="off" data-i18n-ph="buscar" placeholder="Busca por obra, contratista, NIT, entidad o número…">
+    <div class="row">
+      <select id="fOrden">
+        <option value="riesgo" data-i18n="oRiesgo">Más alertas primero</option>
+        <option value="valor" data-i18n="oValor">Más plata primero</option>
+        <option value="fin" data-i18n="oFin">Vencimiento más cercano</option>
+        <option value="firma" data-i18n="oFirma">Más recientes</option>
+      </select>
+      <button id="btnCompartirMuni" class="btn ghost dark-ghost" data-i18n="compartirMuni">Compartir este municipio</button>
+    </div>
+    <div id="chips" class="chips"></div>
+  </div>
+  <div class="stats" id="stats">
+    <div class="stat"><b data-count="abiertos">0</b><span data-i18n="sAbiertos">contratos sin terminar</span></div>
+    <div class="stat"><b data-count="valor" data-money>0</b><span data-i18n="sValor">en juego</span></div>
+    <div class="stat hot"><b data-count="vencidos">0</b><span data-i18n="sVencidos">ya vencieron y siguen abiertos</span></div>
+    <div class="stat"><b data-count="alertas">0</b><span data-i18n="sAlertas">con alguna alerta</span></div>
+  </div>
+  <p id="conteo" class="conteo"></p>
+  <div id="cards" class="cards"></div>
+  <button id="btnMas" class="btn ghost wide dark-ghost" hidden data-i18n="verMas">Ver más</button>
+  <div class="ranking-wrap">
+    <h3 data-i18n="topContratistas">¿Quién se lleva más contratos aquí?</h3>
+    <div id="ranking" class="ranking"></div>
+  </div>
+</section>
+
+<section class="adopta" id="adoptados">
+  <div class="adopta-img" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/El_r%C3%ADo_Cauca.jpg?width=1200')"></div>
+  <div class="adopta-body">
+    <p class="kicker" data-i18n="campana">Campaña</p>
+    <h2 data-i18n="adoptaT">Adopta un contrato</h2>
+    <p data-i18n="adoptaP">Un ciudadano, un contrato. Escoge una obra de tu barrio, dale "Adoptar" y la app te avisa cada vez que cambie la plata pagada, el plazo o el estado. Ve a la obra, toma fotos y compara con lo que dice el contrato.</p>
+    <div id="misAdoptados" class="adoptados"></div>
+    <button id="btnInvitar" class="btn primary" data-i18n="invitar">Invitar a otros a adoptar uno</button>
+  </div>
+</section>
+
+<section class="registro" id="registro">
+  <div class="sec-head"><h2 data-i18n="regT">Regístrate como veedor en el SECOP II</h2></div>
+  <p class="intro" data-i18n="regIntro">Para mirar contratos no hace falta cuenta. Con cuenta de veedor puedes suscribirte a los procesos, recibir sus avisos y hacer observaciones a los documentos. El registro es gratis y se hace con una cuenta de tipo Proveedor.</p>
+  <ol class="steps" id="steps"></ol>
+  <div class="reg-actions">
+    <a class="btn primary" href="https://community.secop.gov.co/sts/cce/login.aspx" target="_blank" rel="noopener" data-i18n="abrirSecop">Abrir el registro del SECOP II</a>
+    <a class="btn ghost dark-ghost" href="https://www.colombiacompra.gov.co/wp-content/uploads/2024/09/20200319guiappregistroveedorv1.pdf" target="_blank" rel="noopener" data-i18n="guiaOficial">Guía oficial de Colombia Compra (PDF)</a>
+  </div>
+  <p class="nota" data-i18n="regAyuda">¿Te trabaste? Mesa de servicio del SECOP II: (601) 745 6788. Atención al ciudadano de Colombia Compra Eficiente: (601) 795 6600.</p>
+</section>
+
+<section class="semaforo">
+  <div class="sec-head"><h2 data-i18n="semT">El semáforo: qué mirar en un contrato</h2></div>
+  <div id="semaforo" class="sem-grid"></div>
+</section>
+
+<section class="exigir" id="exigir">
+  <div class="sec-head"><h2 data-i18n="exigirT">Cómo exigir cuentas</h2></div>
+  <ol class="como-list" id="comoList"></ol>
+  <div class="leyes" id="leyes"></div>
+  <div class="cuidado">
+    <h3 data-i18n="cuidadoT">Muestra datos, no acusaciones</h3>
+    <p data-i18n="cuidadoP">Una alerta no prueba un delito: a veces la entidad solo no ha subido los pagos o la prórroga tiene una razón válida. Pregunta con los datos en la mano ("este contrato lleva tres prórrogas, ¿por qué?") y deja que los entes de control investiguen. Así te proteges de demandas y la veeduría gana credibilidad.</p>
+  </div>
+</section>
+
+<section class="noticias" id="noticiasSec" hidden>
+  <div class="sec-head"><h2 data-i18n="noticias">En las noticias</h2></div>
+  <div id="noticias" class="news"></div>
+</section>
+
+<section class="riega">
+  <h2 data-i18n="riegaT">Riega la idea</h2>
+  <p data-i18n="riegaP">Mientras más ciudadanos miren, más difícil es robarse la plata de todos. Comparte la app con tu familia, tu junta de acción comunal y el grupo del colegio.</p>
+  <div class="hero-actions center">
+    <button id="btnCompartirApp" class="btn primary" data-i18n="compartirApp">Compartir la app</button>
+    <a id="btnWaApp" class="btn wa" target="_blank" rel="noopener" data-i18n="waApp">Enviar por WhatsApp</a>
+  </div>
+</section>
+
+<footer class="foot">
+  <p data-i18n="fuente">Fuente: SECOP II – Contratos Electrónicos, datos abiertos de Colombia Compra Eficiente (datos.gov.co). La app no inventa ni modifica datos: muestra lo que las entidades publican.</p>
+  <p id="robotInfo"></p>
+  <p class="sign">Vibras Positivas HM · Caucasia, Antioquia · 311 770 0431</p>
+</footer>
+
+<div id="sheet" class="sheet" hidden>
+  <div class="sheet-bg" data-close></div>
+  <article class="sheet-card" role="dialog" aria-modal="true">
+    <button class="close" data-close data-i18n="cerrar">Cerrar</button>
+    <div id="sheetBody"></div>
+  </article>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="app.js"></script>
+</body>
+</html>
